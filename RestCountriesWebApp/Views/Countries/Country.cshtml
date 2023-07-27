@@ -1,0 +1,50 @@
+﻿@model CountryViewModel
+@{
+  ViewData["Title"] = Model.Country.Name;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Population: @Model.Country.Population</p>
+
+<p>Region: <a asp-controller="Regions" asp-action="Index" asp-route-name="@Model.Country.Region">@Model.Country.Region</a></p>
+
+<p>Subregion: <a asp-controller="Subregions" asp-action="Index" asp-route-name="@Model.Country.Subregion">@Model.Country.Subregion</a></p>
+
+@*Some countries have multiple*@
+<h4>Capital Cities:</h4>
+<ul>
+  @foreach (var city in Model.Country.Capitals)
+  {
+    <li>@city</li>
+  }
+</ul>
+
+<h4>Currencies:</h4>
+<ul>
+  @foreach (var currency in Model.Country.Currencies)
+  {
+    <li>@currency</li>
+  }
+</ul>
+
+<h4>Languages:</h4>
+<ul>
+  @foreach (var language in Model.Country.Languages)
+  {
+    <li>@language</li>
+  }
+</ul>
+
+@if (Model.Country.BorderCountries.Any())
+{
+  <h4>Neighbouring Countries:</h4>
+  <ul>
+    @foreach (var country in Model.Country.BorderCountries)
+    {
+      <li>
+        <a asp-controller="Countries" asp-action="Country" asp-route-name="@country.Name">@country.Name</a>
+      </li>
+    }
+  </ul>
+}

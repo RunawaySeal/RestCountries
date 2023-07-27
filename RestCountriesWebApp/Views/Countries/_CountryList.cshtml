@@ -1,0 +1,90 @@
+﻿@model CountriesViewModel;
+
+<div class="row">
+  <input class="col-3 m-1" id="searchName" type="text" placeholder="Official Name" value="@Model.SearchFilters.SearchName">
+  <input class="col-3 m-1" id="searchRegion" type="text" placeholder="Region" value="@Model.SearchFilters.SearchRegion">
+  <input class="col-3 m-1" id="searchSubregion" type="text" placeholder="Subregion" value="@Model.SearchFilters.SearchSubregion">
+
+  <button class="btn btn-secondary col m-1" class="btn btn-outline-secondary" type="button" onclick="loadCountries()">Search</button>
+</div>
+<table class="table table-striped" style="width:100%">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Region</th>
+      <th>Subregion</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var country in Model.Countries)
+    {
+      <tr>
+        <td>
+          <a asp-controller="Countries" asp-action="Country" asp-route-name="@country.Name">@country.Name</a>
+        </td>
+        <td>
+          <a asp-controller="Regions" asp-action="Index" asp-route-name="@country.Region">@country.Region</a>
+        </td>
+        <td>
+          <a asp-controller="Subregions" asp-action="Index" asp-route-name="@country.Subregion">@country.Subregion</a>
+        </td>
+      </tr>
+    }
+    @if (!Model.Countries.Any())
+    {
+      <tr>
+        <td>No countries found...</td>
+        <td></td>
+        <td></td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<nav aria-label="Page navigation">
+  <ul class="pagination">
+    <li class="page-item @(Model.SearchFilters.PageNumber > 1 ? "" : "disabled")">
+      <a class="page-link" href="#" aria-label="Previous" onclick="loadCountries(1)">
+        <span aria-hidden="true">First</span>
+      </a>
+    </li>
+    <li class="page-item @(Model.SearchFilters.PageNumber > 1 ? "" : "disabled")">
+      <a class="page-link" href="#" aria-label="Previous" onclick="loadCountries(@Model.SearchFilters.PageNumber - 1)">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    @for (int i = 5; i > 0; i--)
+    {
+      var pageNo = Model.SearchFilters.PageNumber - i;
+      if (pageNo >= 1)
+      {
+        <li class="page-item">
+          <a class="page-link" href="#" onclick="loadCountries(@pageNo)">@pageNo</a>
+        </li>
+      }
+    }
+    <li class="page-item disabled">
+      <a class="page-link" href="#" onclick="loadCountries(@Model.SearchFilters.PageNumber)">@Model.SearchFilters.PageNumber</a>
+    </li>
+    @for (int i = 1; i <= 5; i++)
+    {
+      var pageNo = Model.SearchFilters.PageNumber + i;
+      if (pageNo <= Model.TotalPages)
+      {
+        <li class="page-item">
+          <a class="page-link" href="#" onclick="loadCountries(@pageNo)">@pageNo</a>
+        </li>
+      }
+    }
+    <li class="page-item @(Model.SearchFilters.PageNumber < Model.TotalPages ? "" : "disabled")">
+      <a class="page-link" href="#" aria-label="Next" onclick="loadCountries(@Model.SearchFilters.PageNumber + 1)">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    <li class="page-item @(Model.SearchFilters.PageNumber < Model.TotalPages ? "" : "disabled")">
+      <a class="page-link" href="#" aria-label="Previous" onclick="loadCountries(@Model.TotalPages)">
+        <span aria-hidden="true">Last</span>
+      </a>
+    </li>
+  </ul>
+</nav>

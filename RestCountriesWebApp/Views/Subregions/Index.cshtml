@@ -1,0 +1,20 @@
+﻿@model SubregionViewModel
+@{
+  ViewData["Title"] = Model.Subregion.Name;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Population: @Model.Subregion.Population</p>
+
+<p>Region: <a asp-controller="Regions" asp-action="Index" asp-route-name="@Model.Subregion.Region">@Model.Subregion.Region</a></p>
+
+<h4>Countries:</h4>
+<ul>
+  @foreach (var country in Model.Subregion.Countries)
+  {
+    <li>
+      <a asp-controller="Countries" asp-action="Country" asp-route-name="@country.Name">@country.Name</a>
+    </li>
+  }
+</ul>
